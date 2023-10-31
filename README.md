@@ -1,4 +1,8 @@
-#This is Practise Digit Classification
+**# Indian Institute of Technology Jodhpur MTECH AI | IITJ23_MLOPS_Practise_DigitClassification**
+
+__#This is Practise Digit Classification__
+
+
 System Requirements:
 OS
 Hardware
