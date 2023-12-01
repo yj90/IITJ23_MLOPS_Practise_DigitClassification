@@ -8,6 +8,8 @@ hand-written digits, from 0-9.
 
 """
 
+## added the decision tree code and model comparision
+
 # Author: Gael Varoquaux <gael dot varoquaux at normalesup dot org>
 # License: BSD 3 clause
 
@@ -74,4 +76,5 @@ for cur_run_i in range(num_runs):
                 results.append(cur_run_results)
 
 print(pd.DataFrame(results).groupby('model_type').describe().T)
+print("Done")
                 
