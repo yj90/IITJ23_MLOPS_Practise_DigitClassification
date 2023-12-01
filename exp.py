@@ -76,4 +76,5 @@ for cur_run_i in range(num_runs):
                 results.append(cur_run_results)
 
 print(pd.DataFrame(results).groupby('model_type').describe().T)
+print("Done")
                 
