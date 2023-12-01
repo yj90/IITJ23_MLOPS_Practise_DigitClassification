@@ -8,6 +8,8 @@ hand-written digits, from 0-9.
 
 """
 
+## added the decision tree code and model comparision
+
 # Author: Gael Varoquaux <gael dot varoquaux at normalesup dot org>
 # License: BSD 3 clause
 
@@ -79,6 +81,7 @@ for cur_run_i in range(num_runs):
                 print("{}-GroundTruth Confusion metrics".format(model_type))
                 print(metrics.confusion_matrix(y_test, predicted_y))
 
+<<<<<<< HEAD
 
 print("svm-tree Confusion metrics".format())
 print(metrics.confusion_matrix(model_preds['svm'], model_preds['tree']))
@@ -91,4 +94,8 @@ print("binarized predictions -- normalized over pred  labels")
 print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False] , normalize='pred'))
         
 # print(pd.DataFrame(results).groupby('model_type').describe().T)
+=======
+print(pd.DataFrame(results).groupby('model_type').describe().T)
+print("Done")
+>>>>>>> main
                 
