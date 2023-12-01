@@ -81,8 +81,6 @@ for cur_run_i in range(num_runs):
                 print("{}-GroundTruth Confusion metrics".format(model_type))
                 print(metrics.confusion_matrix(y_test, predicted_y))
 
-<<<<<<< HEAD
-
 print("svm-tree Confusion metrics".format())
 print(metrics.confusion_matrix(model_preds['svm'], model_preds['tree']))
 
@@ -93,9 +91,4 @@ print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels
 print("binarized predictions -- normalized over pred  labels")
 print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False] , normalize='pred'))
         
-# print(pd.DataFrame(results).groupby('model_type').describe().T)
-=======
-print(pd.DataFrame(results).groupby('model_type').describe().T)
-print("Done")
->>>>>>> main
-                
+# print(pd.DataFrame(results).groupby('model_type').describe().T)              
