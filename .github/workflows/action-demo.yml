@@ -24,5 +24,5 @@ jobs:
         run: python3 digits.py --runs 4 --test_sizes 0.2,0.3 --dev_sizes 0.2 --models svm,tree
       - name: Run test cases
         run: python3 -m pytest
-      - name: Run docker commands added
+      - name: Run docker commands
         run: source ./docker/docker_run.sh
