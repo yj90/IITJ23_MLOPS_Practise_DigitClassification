@@ -1,8 +1,23 @@
 from flask import Flask, request, jsonify
 from joblib import load
 import os
+from markupsafe import escape
 
 app = Flask(__name__)
+
+def load_model(model_name):
+    models_path = '/home/yjlinuxubu/mlops23/IITJ23_MLOPS_Practise_DigitClassification/models'
+
+    if model_name == 'svm':
+        filename = os.path.join(models_path, 'svm_gamma_0.0001_C_10.joblib')
+    elif model_name == 'tree':
+        filename = os.path.join(models_path, 'tree_max_depth_15.joblib')
+    elif model_name == 'lr':
+        filename = os.path.join(models_path, 'M22AIE236_lr_lbfgs.joblib')
+    else:
+        return None
+
+    return load(filename)
 
 @app.route('/')
 def index():
@@ -10,29 +25,24 @@ def index():
 
 @app.route("/", methods=["POST"])
 def hello_world_post():    
-    return {"op" : "Hello, World POST " + request.json["suffix"]}
+    return {"op": "Hello, World POST " + request.json["suffix"]}
 
-@app.route('/predict', methods=['POST'])
-def pred_model():
+@app.route('/predict/<model_name>', methods=['POST'])
+def pred_model(model_name):
     js = request.get_json()
-    image1 = [js['image']]
-    #Assuming this is the path of our best trained model
-<<<<<<< HEAD
-    model = load('/home/yjlinuxubu/mlops23/IITJ23_MLOPS_Practise_DigitClassification/models/svmgamma:0.001_C:1.joblib')
-    prediction_image_1 = model.predict(image1)
-    prediction_image_2 = model.predict(image2)
-    if(prediction_image_1 == prediction_image_2):
-        return "True"
-    else:
-        return "False"
-=======
-    dirname = os.path.dirname(__file__)
-    filename = os.path.join(dirname, '../models/treemax_depth:100.joblib')
-    model = load(filename)
-    pred1 = model.predict(image1)
-    #reurn pred1 in json
-    return jsonify(prediction=pred1.tolist())
+    model_name = escape(model_name)
     
+    # Assuming this is the path of our best trained model
+    model = load_model(model_name)
+    
+    if model is None:
+        return jsonify(error="Invalid model name"), 400
+
+    image1 = [js['image']]
+    pred1 = model.predict(image1)
+    
+    # Return pred1 in json
+    return jsonify(prediction=pred1.tolist())
+
 if __name__ == '__main__':
     app.run(debug=True)
->>>>>>> feature/class16-Quiz4

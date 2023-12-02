@@ -24,8 +24,7 @@ parser=argparse.ArgumentParser()
 parser.add_argument("--runs", help="number of runs")
 parser.add_argument("--test_sizes", help="comma sprated value of test sizes")
 parser.add_argument("--dev_sizes", help="comma sprated value of dev sizes")
-parser.add_argument("--prod", help="model to be used for production")
-parser.add_argument("--candidate", help="model to be used as candidate")
+parser.add_argument("--models", help="model to be used for production")
 
 args=parser.parse_args()
 
@@ -34,11 +33,11 @@ test_sizes = args.test_sizes.split(',')
 test_sizes = [float(i) for i in test_sizes]
 dev_sizes = args.dev_sizes.split(',')
 dev_sizes = [float(i) for i in dev_sizes]
-#models = args.models.split(',')
-# models = [str(i) for i in models] 
-models = []
-models.append(args.prod)
-models.append(args.candidate)
+models = args.models.split(',')
+models = [str(i) for i in models] 
+# models = []
+# models.append(args.prod)
+# models.append(args.candidate)
 
 
 #print("Total number of samples : ", len(x))
@@ -72,6 +71,10 @@ for i in range(max_runs):
             max_depth = [5,10,15,20,50,100]
             classifer_hparam['tree'] = [{'max_depth': depth} for depth in max_depth]
 
+            solvers = ['lbfgs', 'liblinear', 'newton-cg', 'sag', 'saga']
+            classifer_hparam['lr'] = [{'solver': solver} for solver in solvers]
+
+
         # Predict the value of the digit on the test subset
         # 6.Predict and Evaluate 
             for model in models:
@@ -81,9 +84,9 @@ for i in range(max_runs):
                 accuracy_test,predicted_test = predict_and_eval(best_model, X_test, y_test)
                 accuracy_dev,_ = predict_and_eval(best_model, X_dev, y_dev)
                 accuracy_train,_ = predict_and_eval(best_model, X_train, y_train)
-                print("Production accuracy "+f" model={model} run_index={i} test_size={test_size} dev_size={dev_size} train_size={1- (dev_size+test_size)} train_acc={accuracy_train} dev_acc={accuracy_dev} test_acc={accuracy_test}" if args.prod == model else "Candidate Accuracy"+f" model={model} run_index={i} test_size={test_size} dev_size={dev_size} train_size={1- (dev_size+test_size)} train_acc={accuracy_train} dev_acc={accuracy_dev} test_acc={accuracy_test}")
-                disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted_test)
-                disp.figure_.suptitle("Confusion Matrix")
-                print(f"Confusion matrix:\n{disp.confusion_matrix}")
+                print("Model accuracy "+f" model={model} run_index={i} test_size={test_size} dev_size={dev_size} train_size={1- (dev_size+test_size)} train_acc={accuracy_train} dev_acc={accuracy_dev} test_acc={accuracy_test}")
+                # disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted_test)
+                # disp.figure_.suptitle("Confusion Matrix")
+                # print(f"Confusion matrix:\n{disp.confusion_matrix}")
                 #results.append([{'model':model,'run_index': i, 'test_size':test_size, 'dev_size':dev_size,'train_size': 1- (dev_size+test_size), 'train_acc':accuracy_train,'dev_acc':accuracy_dev,'test_acc':accuracy_test}])
         #print(f"best_gamma={best_hparams['gamma']},best_C={best_hparams['C']}")
