@@ -47,7 +47,7 @@ def predict_and_eval(model, X, y):
     predicted = model.predict(X)
     accuracy = accuracy_score(y, predicted)
 
-    return accuracy
+    return accuracy,predicted
 
 def tune_hparams(X_train, Y_train, X_dev, y_dev, list_of_all_param_combination, model_type='svm'):
     best_accuracy_so_far = -1
@@ -60,7 +60,7 @@ def tune_hparams(X_train, Y_train, X_dev, y_dev, list_of_all_param_combination, 
         if model_type == 'tree':
             cur_model = train_model(X_train, Y_train, {'max_depth': param_combination['max_depth']}, model_type='tree')
 
-        cur_accuracy = predict_and_eval(cur_model, X_dev, y_dev)
+        cur_accuracy,_ = predict_and_eval(cur_model, X_dev, y_dev)
         if cur_accuracy > best_accuracy_so_far:
             best_accuracy_so_far = cur_accuracy
             if model_type == 'svm':
