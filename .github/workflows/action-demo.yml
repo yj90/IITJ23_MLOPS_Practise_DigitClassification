@@ -21,7 +21,7 @@ jobs:
       - name: Install dep
         run:  pip3 install --no-cache-dir -r requirements.txt
       - name: Run code
-        run: python3 digits.py --runs 4 --test_sizes 0.3 --dev_sizes 0.2 --prod tree --candidate svm
+        run: python3 digits.py --runs 4 --test_sizes 0.3 --dev_sizes 0.2 --prod svm --candidate tree
       - name: Run test cases
         run: python3 -m pytest
       - name: Run docker commands

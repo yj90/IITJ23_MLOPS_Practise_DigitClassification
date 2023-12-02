@@ -1,11 +1,12 @@
 
 # Import datasets, classifiers and performance metrics
-from sklearn import svm,datasets
+from sklearn import svm,datasets,linear_model
 from sklearn.model_selection import train_test_split
 from sklearn import tree
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
 from joblib import dump,load
+from sklearn import preprocessing
 
 #read gigits
 def read_digits():
@@ -17,7 +18,9 @@ def read_digits():
 # We will define utils here :
 def preprocess_data(data):
     n_samples = len(data)
+
     data = data.reshape((n_samples, -1))
+    data = preprocessing.normalize(data, norm='l2')
     return data
 
 # Split data into 50% train and 50% test subsets
@@ -34,6 +37,8 @@ def train_model(X, y, model_params,model_type = 'svm'):
         clf = svm.SVC(**model_params)
     if model_type == 'tree':
         clf = tree.DecisionTreeClassifier(**model_params)
+    if model_type == 'lr':
+        clf = linear_model.LogisticRegression(**model_params)
     clf.fit(X, y)
     return clf
 
@@ -59,18 +64,34 @@ def tune_hparams(X_train, Y_train, X_dev, y_dev, list_of_all_param_combination, 
             cur_model = train_model(X_train, Y_train, {'gamma': param_combination['gamma'],'C':param_combination['C']}, model_type='svm')
         if model_type == 'tree':
             cur_model = train_model(X_train, Y_train, {'max_depth': param_combination['max_depth']}, model_type='tree')
+        if model_type == 'lr':
+            cur_model = train_model(X_train, Y_train, {'solver': param_combination['solver']}, model_type='lr')
 
         cur_accuracy,_ = predict_and_eval(cur_model, X_dev, y_dev)
+        if model_type == 'lr':
+            curr_model_path = "./models/M22AIE236_{}".format(model_type)+"_{}".format(param_combination['solver'])+".joblib"
+            dump(cur_model,curr_model_path)
+            print(f"For model {model_type} and solver {param_combination['solver']} accuracy is {cur_accuracy}")
+
         if cur_accuracy > best_accuracy_so_far:
             best_accuracy_so_far = cur_accuracy
+            '''
             if model_type == 'svm':
                 optimal_gamma = param_combination['gamma']
                 optimal_C = param_combination['C']
                 best_hparams = {'gamma': optimal_gamma,'C':optimal_C}
+                best_model_path = "./models/{}".format(model_type)+"_".join(["{}:{}".format(k,v) for k,v in best_hparams.items()])+".joblib"
+
             if model_type == 'tree':
                 optimal_max_depth = param_combination['max_depth']
                 best_hparams = {'max_depth': optimal_max_depth}
-            best_model_path = "./models/{}".format(model_type)+"_".join(["{}:{}".format(k,v) for k,v in best_hparams.items()])+".joblib"
+                best_model_path = "./models/{}".format(model_type)+"_".join(["{}:{}".format(k,v) for k,v in best_hparams.items()])+".joblib"
+            '''
+            if model_type == 'lr':
+                optimal_solver = param_combination['solver']
+                best_hparams = {'solver': optimal_solver}
+                best_model_path = "./models/M22AIE236_{}".format(model_type)+"_".join(["_{}".format(v) for k,v in best_hparams.items()])+".joblib"
+
 
             best_model = cur_model
 
