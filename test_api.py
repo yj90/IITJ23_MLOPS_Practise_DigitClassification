@@ -1,8 +1,9 @@
 from api.app import app
 import pytest
 from utils import read_digits,preprocess_data
+import pandas as pd
 
-# Basic example testing 
+# Basic example testing added
 def test_get_root():
     response = app.test_client().get("/")
     assert response.status_code == 200
