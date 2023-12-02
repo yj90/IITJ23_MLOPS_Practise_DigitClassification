@@ -3,19 +3,17 @@ from joblib import load
 import os
 from markupsafe import escape
 
-
 app = Flask(__name__)
 
-
 def load_model(model_name):
-    dirname = os.path.dirname(__file__)
+    models_path = '/home/yjlinuxubu/mlops23/IITJ23_MLOPS_Practise_DigitClassification/models'
 
     if model_name == 'svm':
-        filename = os.path.join(dirname, '../models/svm_gamma_0.0001_C_10.joblib')
+        filename = os.path.join(models_path, 'svm_gamma_0.0001_C_10.joblib')
     elif model_name == 'tree':
-        filename = os.path.join(dirname, '../models/treemax_depth_15.joblib')
+        filename = os.path.join(models_path, 'tree_max_depth_15.joblib')
     elif model_name == 'lr':
-        filename = os.path.join(dirname, '../models/M22AIE236_lr_lbfgs.joblib')
+        filename = os.path.join(models_path, 'M22AIE236_lr_lbfgs.joblib')
     else:
         return None
 
