@@ -6,22 +6,20 @@ from markupsafe import escape
 
 app = Flask(__name__)
 
+
 def load_model(model_name):
     dirname = os.path.dirname(__file__)
-    filename_svm = os.path.join(dirname, '../models/svmgamma:0.0001_C:1.joblib')
-    svm = load(filename_svm)
-    filename_tree = os.path.join(dirname, '../models/tree_max_depth:100.joblib')
-    tree = load(filename_tree)
-    filename_lr = os.path.join(dirname, '../models/M22AIE236_lr_lbfgs.joblib')
-    lr = load(filename_lr)
+
     if model_name == 'svm':
-        return svm
+        filename = os.path.join(dirname, '../models/svm_gamma_0.0001_C_10.joblib')
     elif model_name == 'tree':
-        return tree
+        filename = os.path.join(dirname, '../models/treemax_depth_15.joblib')
     elif model_name == 'lr':
-        return lr
+        filename = os.path.join(dirname, '../models/M22AIE236_lr_lbfgs.joblib')
     else:
         return None
+
+    return load(filename)
 
 @app.route('/')
 def index():
@@ -29,18 +27,24 @@ def index():
 
 @app.route("/", methods=["POST"])
 def hello_world_post():    
-    return {"op" : "Hello, World POST " + request.json["suffix"]}
+    return {"op": "Hello, World POST " + request.json["suffix"]}
 
 @app.route('/predict/<model_name>', methods=['POST'])
 def pred_model(model_name):
     js = request.get_json()
     model_name = escape(model_name)
-    image1 = [js['image']]
-    #Assuming this is the path of our best trained model
-    model = load_model(model_name)
-    pred1 = model.predict(image1)
-    #reurn pred1 in json
-    return jsonify(prediction=pred1.tolist())
     
+    # Assuming this is the path of our best trained model
+    model = load_model(model_name)
+    
+    if model is None:
+        return jsonify(error="Invalid model name"), 400
+
+    image1 = [js['image']]
+    pred1 = model.predict(image1)
+    
+    # Return pred1 in json
+    return jsonify(prediction=pred1.tolist())
+
 if __name__ == '__main__':
     app.run(debug=True)
