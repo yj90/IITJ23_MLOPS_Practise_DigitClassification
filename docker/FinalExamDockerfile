@@ -1,0 +1,5 @@
+FROM base:latest
+
+WORKDIR /digits
+ENV FLASK_APP=api/app
+CMD [ "python3", "-m" , "pytest"]
