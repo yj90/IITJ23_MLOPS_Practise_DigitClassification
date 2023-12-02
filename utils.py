@@ -75,7 +75,6 @@ def tune_hparams(X_train, Y_train, X_dev, y_dev, list_of_all_param_combination, 
 
         if cur_accuracy > best_accuracy_so_far:
             best_accuracy_so_far = cur_accuracy
-            '''
             if model_type == 'svm':
                 optimal_gamma = param_combination['gamma']
                 optimal_C = param_combination['C']
@@ -86,7 +85,7 @@ def tune_hparams(X_train, Y_train, X_dev, y_dev, list_of_all_param_combination, 
                 optimal_max_depth = param_combination['max_depth']
                 best_hparams = {'max_depth': optimal_max_depth}
                 best_model_path = "./models/{}".format(model_type)+"_".join(["{}:{}".format(k,v) for k,v in best_hparams.items()])+".joblib"
-            '''
+
             if model_type == 'lr':
                 optimal_solver = param_combination['solver']
                 best_hparams = {'solver': optimal_solver}
