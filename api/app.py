@@ -13,7 +13,7 @@ def pred_model():
     image1 = js['image1']
     image2 = js['image2']
     #Assuming this is the path of our best trained model
-    model = load('/Users/pranjal/Desktop/ml-ops/models/svmgamma:0.001_C:1.joblib')
+    model = load('/home/yjlinuxubu/mlops23/IITJ23_MLOPS_Practise_DigitClassification/models/svmgamma:0.001_C:1.joblib')
     prediction_image_1 = model.predict(image1)
     prediction_image_2 = model.predict(image2)
     if(prediction_image_1 == prediction_image_2):
